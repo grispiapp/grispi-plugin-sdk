@@ -1,5 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
+const VERSION = "0.1.0";
 let initializing = false;
 let initMethodCalled = false;
 let instance = null;
@@ -19,6 +20,11 @@ class PalmdaClient {
         if (!instance) {
             instance = this;
         }
+        
+        Object.defineProperty(instance, 'version', {
+          value: VERSION,
+          writable: false
+        });
 
         return instance;
     }
@@ -28,6 +34,10 @@ class PalmdaClient {
         return new PalmdaClient();
     }
 
+    /**
+    * Internal usage, don't use this method.
+    * This must be the first method ever called on this object. This method is called by the library itself and users should not call this method.
+    */
     _init() {
         if (pluginConfig) {
             return Promise.resolve(pluginConfig);
