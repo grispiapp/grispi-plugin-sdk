@@ -20,6 +20,10 @@
       },
       endedCall: function (phoneNumber) {
         sendMessage({id: 'pluginId', type: 'endedCall', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      validateImplementation: function() {
+        debugger
+        console.log(this)
       }
     };
 
