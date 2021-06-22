@@ -2,7 +2,7 @@
 // ------------------ CLIENT LIBRARY ----------------------
   const VERSION = "0.1.0";
 
-  if (typeof window.PalmdaClient !== "function") {
+  if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
   }
 
