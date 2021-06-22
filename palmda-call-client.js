@@ -11,20 +11,42 @@
   // All phone numbers are in E164 format (+905051234567)
   function init() {
 
+    // Palmda => iFrame XXXCall()
+    // iFrame => Palmda CallXXX()
+
     PalmdaClient.prototype.call = {
-      incomingCall: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'incomingCall', auth: 'token', data: {phoneNumber: phoneNumber}});
-      },
-      answeredCall: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'answeredCall', auth: 'token', data: {phoneNumber: phoneNumber}});
-      },
-      endedCall: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'endedCall', auth: 'token', data: {phoneNumber: phoneNumber}});
-      },
+
+      // Make sure all XXXCall methods are implemented by the plugin
       validateImplementation: function() {
         debugger
         console.log(this)
-      }
+
+        'makeCall'
+        'answerCall'
+        'hangupCall'
+        'muteCall'
+        'unmuteCall'
+        'holdCall'
+        'unholdCall'
+        'setStatus'
+      },
+
+      // iFrame => Palmda :: Following methods will be called by plugin code in order to inform the parent page
+      // ----------------
+      callIncoming: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'callIncoming', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      callAnswered: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'callAnswered', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      callEnded: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'callEnded', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      statusSet: function (status) {
+        //TODO validate status string
+        sendMessage({id: 'pluginId', type: 'statusSet', auth: 'token', data: {status: status}});
+      },
+
     };
 
     Object.defineProperty(PalmdaClient.instance(), 'callVersion', {
