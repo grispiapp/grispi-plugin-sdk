@@ -122,4 +122,5 @@
     .then((data) => (pluginConfig = data));
 
   window.PalmdaClient = PalmdaClient;
+  console.log(`PalmdaClient v${VERSION} initialized successfully.`)
 }

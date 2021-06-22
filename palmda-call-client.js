@@ -24,6 +24,7 @@
     });
   }
 
+  console.log(`PalmdaCallClient v${VERSION} (using PalmdaClient v${VERSION}) initialized successfully.`)
 }// end of client library
 
 /*
