@@ -71,20 +71,23 @@
           'message',
           (e) => {
             if (e.origin !== origin) {
-              console.error(`Origins does not match. Expected '${origin}' but found '${e.origin}'!`);
-              reject(new Error(`E3 Origins does not match. Expected '${origin}' but found '${e.origin}'!`));
+              const msg = `E3 Origins does not match. Expected '${origin}' but found '${e.origin}'!`;
+              console.error(msg);
+              reject(new Error(msg));
               return;
             }
 
             if (!e.data) {
-              console.error(`Event data (event.data) is missing.`, e);
-              reject(new Error(`E4 Event data (event.data) is missing.`));
+              const msg = `E4 Event data (event.data) is missing.`;
+              console.error(msg);
+              reject(new Error(msg));
               return;
             }
 
             if (!e.data.type) {
-              console.error(`Event data type (event.data.type) is missing.`, e);
-              reject(new Error(`E5 Event data type (event.data.type) is missing.`));
+              const msg = `E5 Event data type (event.data.type) is missing.`;
+              console.error(msg);
+              reject(new Error(msg));
               return;
             }
 

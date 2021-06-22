@@ -10,16 +10,17 @@
 
   // All phone numbers are in E164 format (+905051234567)
   function init() {
-    PalmdaClient.prototype.incomingCall = function (phoneNumber) {
-      sendMessage({id: 'pluginId', type: 'incomingCall', auth: 'token', data: {phoneNumber: phoneNumber}});
-    };
 
-    PalmdaClient.prototype.answeredCall = function (phoneNumber) {
-      sendMessage({id: 'pluginId', type: 'answeredCall', auth: 'token', data: {phoneNumber: phoneNumber}});
-    };
-
-    PalmdaClient.prototype.endedCall = function (phoneNumber) {
-      sendMessage({id: 'pluginId', type: 'endedCall', auth: 'token', data: {phoneNumber: phoneNumber}});
+    PalmdaClient.prototype.call = {
+      incomingCall: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'incomingCall', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      answeredCall: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'answeredCall', auth: 'token', data: {phoneNumber: phoneNumber}});
+      },
+      endedCall: function (phoneNumber) {
+        sendMessage({id: 'pluginId', type: 'endedCall', auth: 'token', data: {phoneNumber: phoneNumber}});
+      }
     };
 
     Object.defineProperty(PalmdaClient.instance(), 'callVersion', {
@@ -27,6 +28,8 @@
       writable: false
     });
   }
+
+  init();
 
   console.log(`PalmdaCallClient v${CALL_VERSION} (using PalmdaClient v${PalmdaClient.instance().version}) initialized successfully.`)
 }// end of client library
