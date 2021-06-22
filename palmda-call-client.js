@@ -28,7 +28,7 @@
         'unmuteCall'
         'holdCall'
         'unholdCall'
-        'setStatus'
+        'setStatus' //
       },
 
       // iFrame => Palmda :: Following methods will be called by plugin code in order to inform the parent page
