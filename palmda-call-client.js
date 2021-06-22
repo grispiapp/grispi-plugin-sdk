@@ -28,7 +28,7 @@
     });
   }
 
-  console.log(`PalmdaCallClient v${CALL_VERSION} (using PalmdaClient v${PalmdaClient.version}) initialized successfully.`)
+  console.log(`PalmdaCallClient v${CALL_VERSION} (using PalmdaClient v${PalmdaClient.instance().version}) initialized successfully.`)
 }// end of client library
 
 /*
