@@ -21,6 +21,7 @@
         // this === PalmdaClient.instance().call
         console.log(this)
 
+        // Palmda => iFrame
         const requiredMethods = {
           'makeCall': false,
           'answerCall': false,
