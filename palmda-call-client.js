@@ -18,17 +18,31 @@
 
       // Make sure all XXXCall methods are implemented by the plugin
       validateImplementation: function() {
-        debugger
+        // this === PalmdaClient.instance().call
         console.log(this)
 
-        'makeCall'
-        'answerCall'
-        'hangupCall'
-        'muteCall'
-        'unmuteCall'
-        'holdCall'
-        'unholdCall'
-        'setStatus' //
+        const requiredMethods = {
+          'makeCall': false,
+          'answerCall': false,
+          'hangupCall': false,
+          'muteCall': false,
+          'unmuteCall': false,
+          'holdCall': false,
+          'unholdCall': false,
+          'setStatus': false
+        };
+
+        const missingMethods = [];
+
+        Object.keys(requiredMethods).forEach(methodName => {
+          if (typeof this[methodName] === 'function') {
+            missingMethods.push(methodName)
+          }
+        });
+
+        if (missingMethods.length === 0) return true;
+
+        throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
       },
 
       // iFrame => Palmda :: Following methods will be called by plugin code in order to inform the parent page
