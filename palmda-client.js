@@ -6,9 +6,21 @@
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
   }
 
-  const origin = window.location.hash.replace('#origin=', '');
+  const parsedHash = new URLSearchParams(window.location.hash.substr(1)); // skip the first char (#)
+
+  const origin = parsedHash.get('origin');
   if (!origin) {
     throw new Error('E1 Origin is empty!');
+  }
+
+  const pluginId = parsedHash.get('pluginId');
+  if (!origin) {
+    throw new Error('E9 pluginId is empty!');
+  }
+
+  const iframeAuth = parsedHash.get('iframeAuth');
+  if (!origin) {
+    throw new Error('E10 iframeAuth is empty!');
   }
 
   let initializing = false;
@@ -107,10 +119,9 @@
           false,
         );
         sendMessage({
-          id: 'pluginId',//FIXME
+          id: pluginId,
           type: 'init',
-          auth: 'token',
-          note: 'Send me the pluginConfig data to connect WS',
+          iframeAuth: iframeAuth
         });
       });
     }
