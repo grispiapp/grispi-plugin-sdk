@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.2";
+  const VERSION = "0.1.3";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -35,8 +35,12 @@
       throw new Error(`Cannot send message without a 'type'!`);
     }
 
+    const type = data.type;
+    delete data.type;
+
     const message = {
       data,
+      type,
       id: pluginId,
       iframeAuth: iframeAuth
     }
