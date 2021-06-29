@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.1";
+  const CALL_VERSION = "0.1.2";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -48,24 +48,24 @@
       // iFrame => Palmda :: Following methods will be called by plugin code in order to inform the parent page
       // ----------------
       callIncoming: function (phoneNumber) {
-        sendMessage({type: 'call.event.incoming', data: {phoneNumber: phoneNumber}});
+        sendMessage('call.event.incoming', {phoneNumber: phoneNumber});
       },
       callAnswered: function (phoneNumber) {
-        sendMessage({type: 'call.event.answered', data: {phoneNumber: phoneNumber}});
+        sendMessage('call.event.answered', {phoneNumber: phoneNumber});
       },
       /**
        * This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
        * @param phoneNumber
        */
       callStarted: function (phoneNumber) {
-        sendMessage({type: 'call.event.started', data: {phoneNumber: phoneNumber}});
+        sendMessage('call.event.started', {phoneNumber: phoneNumber});
       },
       callEnded: function (phoneNumber) {
-        sendMessage({type: 'call.event.ended', data: {phoneNumber: phoneNumber}});
+        sendMessage('call.event.ended', {phoneNumber: phoneNumber});
       },
       statusSet: function (status) {
         //TODO validate status string
-        sendMessage({type: 'call.event.statusSet', data: {status: status}});
+        sendMessage('call.event.statusSet', {status: status});
       },
 
     };
