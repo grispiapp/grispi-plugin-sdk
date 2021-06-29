@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.0";
+  const CALL_VERSION = "0.1.1";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -19,7 +19,6 @@
       // Make sure all XXXCall methods are implemented by the plugin
       validateImplementation: function() {
         // this === PalmdaClient.instance().call
-        console.log(this)
 
         // Palmda => iFrame
         const requiredMethods = {
@@ -49,17 +48,24 @@
       // iFrame => Palmda :: Following methods will be called by plugin code in order to inform the parent page
       // ----------------
       callIncoming: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'callIncoming', auth: 'token', data: {phoneNumber: phoneNumber}});
+        sendMessage({type: 'call.event.incoming', data: {phoneNumber: phoneNumber}});
       },
       callAnswered: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'callAnswered', auth: 'token', data: {phoneNumber: phoneNumber}});
+        sendMessage({type: 'call.event.answered', data: {phoneNumber: phoneNumber}});
+      },
+      /**
+       * This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
+       * @param phoneNumber
+       */
+      callStarted: function (phoneNumber) {
+        sendMessage({type: 'call.event.started', data: {phoneNumber: phoneNumber}});
       },
       callEnded: function (phoneNumber) {
-        sendMessage({id: 'pluginId', type: 'callEnded', auth: 'token', data: {phoneNumber: phoneNumber}});
+        sendMessage({type: 'call.event.ended', data: {phoneNumber: phoneNumber}});
       },
       statusSet: function (status) {
         //TODO validate status string
-        sendMessage({id: 'pluginId', type: 'statusSet', auth: 'token', data: {status: status}});
+        sendMessage({type: 'call.event.statusSet', data: {status: status}});
       },
 
     };

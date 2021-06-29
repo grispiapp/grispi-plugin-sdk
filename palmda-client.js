@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.0";
+  const VERSION = "0.1.1";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -14,12 +14,12 @@
   }
 
   const pluginId = parsedHash.get('pluginId');
-  if (!origin) {
+  if (!pluginId) {
     throw new Error('E9 pluginId is empty!');
   }
 
   const iframeAuth = parsedHash.get('iframeAuth');
-  if (!origin) {
+  if (!iframeAuth) {
     throw new Error('E10 iframeAuth is empty!');
   }
 
@@ -29,7 +29,18 @@
   let pluginConfig = null;
 
   function sendMessage(data) {
-    window.parent.postMessage(data, origin);
+
+    if (!data.type) {
+      console.error(`Cannot send message without a 'type'!`, data);
+      throw new Error(`Cannot send message without a 'type'!`);
+    }
+
+    const message = {
+      ...data,
+      id: pluginId,
+      iframeAuth: iframeAuth
+    }
+    window.parent.postMessage(message, origin);
   }
 
   class PalmdaClient {
