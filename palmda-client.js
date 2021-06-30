@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.4";
+  const VERSION = "0.1.5";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -115,21 +115,15 @@
               return;
             }
 
-            switch (e.data.type) {
-              case 'init': {
-                pluginConfig = e.data.data;
-                resolve(pluginConfig);
-                return;
-              }
-              default: {
-                const type = e.data.type;
-
-                return;
-              }
+            if (e.data.type === 'init') {
+              pluginConfig = e.data.data;
+              resolve(pluginConfig);
+              return;
             }
-          },
-          false,
-        );
+
+            // Events other than 'init' should be handled by individual apps.
+            // For example, call-client handles events with prefix 'grispi.call.'
+          });
         sendMessage('init');
       });
     }
