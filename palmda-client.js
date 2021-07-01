@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.5";
+  const VERSION = "0.1.6";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -27,6 +27,7 @@
   let initMethodCalled = false;
   let instance = null;
   let pluginConfig = null;
+  let currentTicketResolveFn = null;
 
   function sendMessage(type, data) {
 
@@ -68,6 +69,7 @@
       return new PalmdaClient();
     }
 
+    //<editor-fold desc="_init()" defaultstate="collapsed">
     /**
      * Internal usage, don't use this method.
      * This must be the first method ever called on this object. This method is called by the library itself and users should not call this method.
@@ -115,21 +117,59 @@
               return;
             }
 
-            if (e.data.type === 'init') {
+            if (e.data.type === 'grispi.app.response.init') {
               pluginConfig = e.data.data;
               resolve(pluginConfig);
               return;
             }
 
-            // Events other than 'init' should be handled by individual apps.
+            if (e.data.type === 'grispi.app.response.currentTicket') {
+              const currentTicketKey = e.data.data;
+              if (typeof currentTicketResolveFn === 'function') {
+                currentTicketResolveFn(currentTicketKey);
+              }
+              return;
+            }
+
+            // Events other than above should be handled by individual apps.
             // For example, call-client handles events with prefix 'grispi.call.'
           });
-        sendMessage('init');
+        sendMessage('grispi.app.request.init');
       });
     }
+    //</editor-fold>
 
     getConfig() {
       return this._init();
+    }
+
+    validateImplementation() {
+      // this === PalmdaClient.instance().call
+
+      // Palmda => iFrame
+      const requiredMethods = {
+        'activeTicketChanged': false, //activeTicketChanged(currentTicketKey)
+      };
+
+      const missingMethods = [];
+
+      Object.keys(requiredMethods).forEach(methodName => {
+        if (typeof this[methodName] !== 'function') {
+          missingMethods.push(methodName)
+        }
+      });
+
+      if (missingMethods.length === 0) return true;
+
+      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
+    }
+
+    currentTicket() {
+      sendMessage('grispi.app.request.currentTicket');
+      return new Promise((resolve, reject) => {
+        currentTicketResolveFn = resolve;
+        //FIXME implement timeout, and think about multiple calls of this method
+      });
     }
   }
 

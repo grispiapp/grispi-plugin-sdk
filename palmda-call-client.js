@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.3";
+  const CALL_VERSION = "0.1.4";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -29,13 +29,14 @@
           'unmuteCall': false,
           'holdCall': false,
           'unholdCall': false,
-          'setStatus': false
+          'setStatus': false,
+          'identifyUserOfCall': false,
         };
 
         const missingMethods = [];
 
         Object.keys(requiredMethods).forEach(methodName => {
-          if (typeof this[methodName] === 'function') {
+          if (typeof this[methodName] !== 'function') {
             missingMethods.push(methodName)
           }
         });
@@ -49,9 +50,13 @@
       // ----------------
       callIncoming: function (phoneNumber) {
         sendMessage('grispi.call.event.incoming', {phoneNumber: phoneNumber});
+        // Grispi window should handle grispi.call.event.incoming event and send a request to backend to initiate upsert ticket operation for phone number
       },
       callAnswered: function (phoneNumber) {
         sendMessage('grispi.call.event.answered', {phoneNumber: phoneNumber});
+      },
+      callRinging: function (phoneNumber) {
+        sendMessage('grispi.call.event.ringing', {phoneNumber: phoneNumber});
       },
       /**
        * This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
