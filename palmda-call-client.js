@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.4";
+  const CALL_VERSION = "0.1.5";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -16,6 +16,18 @@
 
     PalmdaClient.prototype.call = {
 
+      messageHandler: function (e) {
+
+        if (e.data.type.startsWith('grispi.call.fn')) {
+          const fnName = e.data.type.replace('grispi.call.fn.', '');
+
+          if (typeof this[fnName] === 'function') {
+            this[fnName](e.data);
+          }
+          return;
+        }
+      },
+
       // Make sure all XXXCall methods are implemented by the plugin
       validateImplementation: function() {
         // this === PalmdaClient.instance().call
@@ -30,7 +42,7 @@
           'holdCall': false,
           'unholdCall': false,
           'setStatus': false,
-          'identifyUserOfCall': false,
+          'userIdentifiedForCall': false,
         };
 
         const missingMethods = [];

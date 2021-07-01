@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.6";
+  const VERSION = "0.1.7";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -130,6 +130,9 @@
               }
               return;
             }
+
+            // Other app libs' event handlers
+            this.call?.messageHandler(e);
 
             // Events other than above should be handled by individual apps.
             // For example, call-client handles events with prefix 'grispi.call.'
