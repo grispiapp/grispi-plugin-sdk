@@ -117,13 +117,13 @@
               return;
             }
 
-            if (e.data.type === 'grispi.app.response.init') {
+            if (e.data.type === 'grispi.plugin.response.init') {
               pluginConfig = e.data.data;
               resolve(pluginConfig);
               return;
             }
 
-            if (e.data.type === 'grispi.app.response.currentTicket') {
+            if (e.data.type === 'grispi.plugin.response.currentTicket') {
               const currentTicketKey = e.data.data;
               if (typeof currentTicketResolveFn === 'function') {
                 currentTicketResolveFn(currentTicketKey);
@@ -137,7 +137,7 @@
             // Events other than above should be handled by individual apps.
             // For example, call-client handles events with prefix 'grispi.call.'
           });
-        sendMessage('grispi.app.request.init');
+        sendMessage('grispi.plugin.request.init');
       });
     }
     //</editor-fold>
@@ -168,7 +168,7 @@
     }
 
     currentTicket() {
-      sendMessage('grispi.app.request.currentTicket');
+      sendMessage('grispi.plugin.request.currentTicket');
       return new Promise((resolve, reject) => {
         currentTicketResolveFn = resolve;
         //FIXME implement timeout, and think about multiple calls of this method
