@@ -26,7 +26,7 @@
   let initializing = false;
   let initMethodCalled = false;
   let instance = null;
-  let pluginConfig = null;
+  let pluginSettings = null;
   let currentTicketResolveFn = null;
 
   function sendMessage(type, data) {
@@ -75,17 +75,17 @@
      * This must be the first method ever called on this object. This method is called by the library itself and users should not call this method.
      */
     _init() {
-      if (pluginConfig) {
-        return Promise.resolve(pluginConfig);
+      if (pluginSettings) {
+        return Promise.resolve(pluginSettings);
       }
 
       if (initMethodCalled) {
         return new Promise((resolve, reject) => {
           //TODO do we need a wait timeout?
           const intervalHandle = setInterval(() => {
-            if (pluginConfig != null) {
+            if (pluginSettings != null) {
               clearInterval(intervalHandle);
-              resolve(pluginConfig);
+              resolve(pluginSettings);
             }
           }, 50);
         });
@@ -118,8 +118,8 @@
             }
 
             if (e.data.type === 'grispi.plugin.response.init') {
-              pluginConfig = e.data.data;
-              resolve(pluginConfig);
+              pluginSettings = e.data.data;
+              resolve(pluginSettings);
               return;
             }
 
@@ -142,7 +142,7 @@
     }
     //</editor-fold>
 
-    getConfig() {
+    getSettings() {
       return this._init();
     }
 
@@ -178,7 +178,7 @@
 
   PalmdaClient.instance()
     ._init()
-    .then((data) => (pluginConfig = data));
+    .then((data) => (pluginSettings = data));
 
   window.PalmdaClient = PalmdaClient;
   console.log(`PalmdaClient v${VERSION} initialized successfully.`)
