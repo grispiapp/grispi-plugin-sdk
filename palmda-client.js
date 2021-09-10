@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.9";
+  const VERSION = "0.2.0";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -164,7 +164,7 @@
               const fnName = e.data.type.replace('grispi.plugin.fn.', '');
 
               if (typeof this[fnName] === 'function') {
-                this[fnName](e.data?.data);
+                this[fnName].apply(this, e.data.parameters);
               }
               return;
             }

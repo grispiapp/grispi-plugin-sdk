@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.7";
+  const CALL_VERSION = "0.2.0";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -22,7 +22,7 @@
           const fnName = e.data.type.replace('grispi.call.fn.', '');
 
           if (typeof this[fnName] === 'function') {
-            this[fnName](e.data?.data);
+            this[fnName].apply(this, e.data.parameters);
           }
           return true;
         }
