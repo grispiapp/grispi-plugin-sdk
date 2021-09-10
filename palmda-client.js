@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.8";
+  const VERSION = "0.1.9";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -69,6 +69,35 @@
       return new PalmdaClient();
     }
 
+    validateImplementation() {
+      // Note that at this point: this === PalmdaClient.instance().call
+
+      // Following methods are expected to be implemented by the plugin.
+      // Following methods will be called by the parent page (Grispi UI) in order to execute an action.
+      // Data flow: Grispi => Library
+      // In Grispi, you're expected to call following functions by sending a specific message to the plugin iframe as follows:
+      // iFrameEl.current.contentWindow.postMessage({type: 'grispi.plugin.fn.<function_name>', data: {...}}, targetOrigin);
+      const requiredMethods = {
+        'activeTicketChanged': false, //activeTicketChanged(currentTicketKey)
+      };
+
+      const missingMethods = [];
+
+      Object.keys(requiredMethods).forEach(methodName => {
+        if (typeof this[methodName] !== 'function') {
+          missingMethods.push(methodName)
+        }
+      });
+
+      if (missingMethods.length === 0) return true;
+
+      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
+    }
+
+    // Following methods will be called by plugin code in order to inform the parent page (Grispi UI) about an event or to retrieve some info
+    // Data flow: Library => Grispi
+    // ----------------
+
     //<editor-fold desc="_init()" defaultstate="collapsed">
     /**
      * Internal usage, don't use this method.
@@ -83,7 +112,7 @@
         return new Promise((resolve, reject) => {
           //TODO do we need a wait timeout?
           const intervalHandle = setInterval(() => {
-            if (pluginSettings != null) {
+            if (pluginSettings != null) { // Wait for the previous init method to set the pluginSettings so that we can call resolve with it
               clearInterval(intervalHandle);
               resolve(pluginSettings);
             }
@@ -131,8 +160,17 @@
               return;
             }
 
-            // Other app libs' event handlers
-            this.call?.messageHandler(e);
+            if (e.data.type.startsWith('grispi.plugin.fn')) {
+              const fnName = e.data.type.replace('grispi.plugin.fn.', '');
+
+              if (typeof this[fnName] === 'function') {
+                this[fnName](e.data?.data);
+              }
+              return;
+            }
+
+            // Other plugin libs' event handlers
+            const hasHandled = this.call?.messageHandler(e);
 
             // Events other than above should be handled by individual apps.
             // For example, call-client handles events with prefix 'grispi.call.'
@@ -144,27 +182,6 @@
 
     getSettings() {
       return this._init();
-    }
-
-    validateImplementation() {
-      // this === PalmdaClient.instance().call
-
-      // Palmda => iFrame
-      const requiredMethods = {
-        'activeTicketChanged': false, //activeTicketChanged(currentTicketKey)
-      };
-
-      const missingMethods = [];
-
-      Object.keys(requiredMethods).forEach(methodName => {
-        if (typeof this[methodName] !== 'function') {
-          missingMethods.push(methodName)
-        }
-      });
-
-      if (missingMethods.length === 0) return true;
-
-      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
     }
 
     currentTicket() {
