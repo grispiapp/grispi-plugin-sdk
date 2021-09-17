@@ -24,6 +24,7 @@
           if (typeof phoneNumber !== 'string') {
             console.error(`Invalid phone number for 'grispi.call.request.makeCall': '${phoneNumber}'`)
           }
+          this.makeCall(phoneNumber);
           return true;
         }
 
