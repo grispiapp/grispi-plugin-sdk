@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.2.0";
+  const VERSION = "0.2.1";
 
   if (typeof window.PalmdaClient === "function") {
     throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
@@ -76,7 +76,7 @@
       // Following methods will be called by the parent page (Grispi UI) in order to execute an action.
       // Data flow: Grispi => Library
       // In Grispi, you're expected to call following functions by sending a specific message to the plugin iframe as follows:
-      // iFrameEl.current.contentWindow.postMessage({type: 'grispi.plugin.fn.<function_name>', data: {...}}, targetOrigin);
+      // iFrameEl.current.contentWindow.postMessage({type: 'grispi.plugin.fn.<function_name>', parameters: [...]}, targetOrigin);
       const requiredMethods = {
         'activeTicketChanged': false, //activeTicketChanged(currentTicketKey)
       };

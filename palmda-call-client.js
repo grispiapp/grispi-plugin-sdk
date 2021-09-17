@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.2.0";
+  const CALL_VERSION = "0.2.1";
   if (typeof PalmdaClient !== "function") {
     throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
   }
@@ -17,6 +17,15 @@
     PalmdaClient.prototype.call = {
 
       messageHandler: function (e) {
+
+        if ('grispi.call.request.makeCall' === e.data.type) {
+          const phoneNumber = e.data.phoneNumber;
+
+          if (typeof phoneNumber !== 'string') {
+            console.error(`Invalid phone number for 'grispi.call.request.makeCall': '${phoneNumber}'`)
+          }
+          return true;
+        }
 
         if (e.data.type.startsWith('grispi.call.fn')) {
           const fnName = e.data.type.replace('grispi.call.fn.', '');
@@ -38,7 +47,7 @@
         // Following methods will be called by the parent page (Grispi UI) in order to execute an action.
         // Data flow: Grispi => Library
         // In Grispi, you're expected to call following functions by sending a specific message to the plugin iframe as follows:
-        // iFrameEl.current.contentWindow.postMessage({type: 'grispi.call.fn.<function_name>', data: {...}}, targetOrigin);
+        // iFrameEl.current.contentWindow.postMessage({type: 'grispi.call.fn.<function_name>', parameters: [...]}, targetOrigin);
         const requiredMethods = {
           'makeCall': false,  // has 1 parameter (string): phone number in E164 format
           'answerCall': false,// has no parameter
