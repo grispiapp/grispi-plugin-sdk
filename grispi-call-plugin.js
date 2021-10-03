@@ -1,20 +1,20 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.2.1";
-  if (typeof PalmdaClient !== "function") {
-    throw new Error('E6 PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.');
+  const CALL_VERSION = "0.1.0";
+  if (typeof GrispiClient !== "function") {
+    throw new Error('E6 GrispiClient is not defined. Call Plugin Library should be added to the page after GrispiClient is defined.');
   }
 
-  if (typeof PalmdaClient.prototype.incomingCall === "function") {
-    throw new Error(`E7 PalmdaCallClient is already defined. Existing version: '${window.PalmdaClient.callVersion}' and this version: '${VERSION}'.`);
+  if (typeof GrispiClient.prototype.incomingCall === "function") {
+    throw new Error(`E7 GrispiCallClient is already defined. Existing version: '${window.GrispiClient.callVersion}' and this version: '${VERSION}'.`);
   }
 
   // All phone numbers are in E164 format (+905051234567)
   function init() {
 
-    // Palmda => iFrame XXXCall()
-    // iFrame => Palmda CallXXX()
+    // Grispi => iFrame XXXCall()
+    // iFrame => Grispi CallXXX()
 
-    PalmdaClient.prototype.call = {
+    GrispiClient.prototype.call = {
 
       messageHandler: function (e) {
 
@@ -42,7 +42,7 @@
 
       // Make sure all XXXCall methods are implemented by the plugin
       validateImplementation: function() {
-        // Note that at this point: this === PalmdaClient.instance().call
+        // Note that at this point: this === GrispiClient.instance().call
 
         // Following methods are expected to be implemented by the plugin.
         // Following methods will be called by the parent page (Grispi UI) in order to execute an action.
@@ -71,7 +71,7 @@
 
         if (missingMethods.length === 0) return true;
 
-        throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
+        throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
       },
 
       // Following methods will be called by plugin code in order to inform the parent page (Grispi UI) about an event or to retrieve some info
@@ -105,7 +105,7 @@
 
     };
 
-    Object.defineProperty(PalmdaClient.instance(), 'callVersion', {
+    Object.defineProperty(GrispiClient.instance(), 'callVersion', {
       value: CALL_VERSION,
       writable: false
     });
@@ -113,16 +113,16 @@
 
   init();
 
-  console.log(`PalmdaCallClient v${CALL_VERSION} (using PalmdaClient v${PalmdaClient.instance().version}) initialized successfully.`)
+  console.log(`GrispiCallClient v${CALL_VERSION} (using GrispiClient v${GrispiClient.instance().version}) initialized successfully.`)
 }// end of client library
 
 /*
-  function waitForPalmdaClient(){
-    if(typeof PalmdaClient !== "undefined"){
+  function waitForGrispiClient(){
+    if(typeof GrispiClient !== "undefined"){
         init();
     }
     else{
-      console.warn("Waiting for PalmdaClient to be defined. This shouldn't ");
+      console.warn("Waiting for GrispiClient to be defined. This shouldn't ");
         setTimeout(waitForElement, 50);
     }
   }

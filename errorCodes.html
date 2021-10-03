@@ -38,22 +38,22 @@
   <tr>
     <td>E0</td>
     <td>
-      <em>PalmdaClient is already defined. Existing version: '${existingVersion}' and this version: '${currentVersion}'.</em>
-      <p>There is already a <code>PalmdaClient</code> variable in the page (window). <code>palmda-client.js</code> may be loaded more than once.</p>
+      <em>GrispiClient is already defined. Existing version: '${existingVersion}' and this version: '${currentVersion}'.</em>
+      <p>There is already a <code>GrispiClient</code> variable in the page (window). <code>grispi-plugin.js</code> may be loaded more than once.</p>
     </td>
   </tr>
   <tr>
     <td>E1</td>
     <td>
       <em>Origin is empty!</em>
-      <p>The iFrame must be opened with '#origin=XXX' hash. This hash is added to the iFrame's src by Palmda.</p>
+      <p>The iFrame must be opened with '#origin=XXX' hash. This hash is added to the iFrame's src by Grispi.</p>
     </td>
   </tr>
   <tr>
     <td>E2</td>
     <td>
       <em>The constructor is private, please use instance() method.</em>
-      <p><code>PalmdaClient</code> is a singleton, use <code>PalmdaClient.instance()</code> to get the instance.</p>
+      <p><code>GrispiClient</code> is a singleton, use <code>GrispiClient.instance()</code> to get the instance.</p>
     </td>
   </tr>
   <tr>
@@ -67,34 +67,34 @@
     <td>E4</td>
     <td>
       <em>Event data (event.data) is missing.</em>
-      <p>Palmda requires all events to contain <code>data</code> (at least <code>data.type</code>)</p>
+      <p>Grispi requires all events to contain <code>data</code> (at least <code>data.type</code>)</p>
     </td>
   </tr>
   <tr>
     <td>E5</td>
     <td>
       <em>Event data type (event.data.type) is missing.</em>
-      <p>Palmda requires all events to contain <code>data</code> and <code>data.type</code>.</p>
+      <p>Grispi requires all events to contain <code>data</code> and <code>data.type</code>.</p>
     </td>
   </tr>
   <tr>
     <td>E6</td>
     <td>
-      <em>PalmdaClient is not defined. Call Plugin Library should be added to the page after PalmdaClient is defined.</em>
-      <p><code>PalmdaClient</code> is not defined. Call Plugin Library should be added to the page after <code>PalmdaClient</code> is defined.</p>
+      <em>GrispiClient is not defined. Call Plugin Library should be added to the page after GrispiClient is defined.</em>
+      <p><code>GrispiClient</code> is not defined. Call Plugin Library should be added to the page after <code>GrispiClient</code> is defined.</p>
     </td>
   </tr>
   <tr>
     <td>E7</td>
     <td>
-      <em><code>PalmdaCallClient</code> is already defined. Existing version: '${existingVersion}' and this version: '${currentVersion}'</em>
-      <p>You have added the <code>palmda-call-client.js</code> file more than once.</p>
+      <em><code>GrispiCallClient</code> is already defined. Existing version: '${existingVersion}' and this version: '${currentVersion}'</em>
+      <p>You have added the <code>grispi-call-plugin.js</code> file more than once.</p>
     </td>
   </tr>
   <tr>
     <td>E8</td>
     <td>
-      <em>Following methods are not not implemented.\n${missingMethods}\nImplement them via '<code>PalmdaClient.prototype.call.&lt;methodName&gt; = aFunction</code>'</em>
+      <em>Following methods are not not implemented.\n${missingMethods}\nImplement them via '<code>GrispiClient.prototype.call.&lt;methodName&gt; = aFunction</code>'</em>
       <p>You need to implement client's required methods.</p>
     </td>
   </tr>
@@ -102,14 +102,14 @@
     <td>E9</td>
     <td>
       <em>pluginId is empty!</em>
-      <p>The iFrame must be opened with '#pluginId=XXX' hash. This hash is added to the iFrame's src by Palmda.</p>
+      <p>The iFrame must be opened with '#pluginId=XXX' hash. This hash is added to the iFrame's src by Grispi.</p>
     </td>
   </tr>
   <tr>
     <td>E10</td>
     <td>
       <em>iframeAuth is empty!</em>
-      <p>The iFrame must be opened with '#iframeAuth=XXX' hash. This hash is added to the iFrame's src by Palmda.</p>
+      <p>The iFrame must be opened with '#iframeAuth=XXX' hash. This hash is added to the iFrame's src by Grispi.</p>
     </td>
   </tr>
   <!--

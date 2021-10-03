@@ -1,9 +1,9 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.2.1";
+  const VERSION = "0.1.0";
 
-  if (typeof window.PalmdaClient === "function") {
-    throw new Error(`E0 PalmdaClient is already defined. Existing version: '${window.PalmdaClient.version}' and this version: '${VERSION}'.`);
+  if (typeof window.GrispiClient === "function") {
+    throw new Error(`E0 GrispiClient is already defined. Existing version: '${window.GrispiClient.version}' and this version: '${VERSION}'.`);
   }
 
   const parsedHash = new URLSearchParams(window.location.hash.substr(1)); // skip the first char (#)
@@ -45,7 +45,7 @@
     window.parent.postMessage(message, origin);
   }
 
-  class PalmdaClient {
+  class GrispiClient {
     constructor() {
       if (!initializing) {
         throw new Error('E2 The constructor is private, please use instance() method.');
@@ -66,11 +66,11 @@
 
     static instance() {
       initializing = true;
-      return new PalmdaClient();
+      return new GrispiClient();
     }
 
     validateImplementation() {
-      // Note that at this point: this === PalmdaClient.instance().call
+      // Note that at this point: this === GrispiClient.instance().call
 
       // Following methods are expected to be implemented by the plugin.
       // Following methods will be called by the parent page (Grispi UI) in order to execute an action.
@@ -91,7 +91,7 @@
 
       if (missingMethods.length === 0) return true;
 
-      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'PalmdaClient.prototype.call.<methodName> = aFunction'`);
+      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
     }
 
     // Following methods will be called by plugin code in order to inform the parent page (Grispi UI) about an event or to retrieve some info
@@ -193,10 +193,10 @@
     }
   }
 
-  PalmdaClient.instance()
+  GrispiClient.instance()
     ._init()
     .then((data) => (pluginSettings = data));
 
-  window.PalmdaClient = PalmdaClient;
-  console.log(`PalmdaClient v${VERSION} initialized successfully.`)
+  window.GrispiClient = GrispiClient;
+  console.log(`GrispiClient v${VERSION} initialized successfully.`)
 }
