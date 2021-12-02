@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.1.0";
+  const VERSION = "0.2.0";
 
   if (typeof window.GrispiClient === "function") {
     throw new Error(`E0 GrispiClient is already defined. Existing version: '${window.GrispiClient.version}' and this version: '${VERSION}'.`);
@@ -25,9 +25,22 @@
 
   let initializing = false;
   let initMethodCalled = false;
+  let pluginImplementationCalledInit = false;
   let instance = null;
   let pluginSettings = null;
   let currentTicketResolveFn = null;
+
+  function validateInitData(data) {
+    if (typeof data !== 'object') {
+      throw new Error(`'grispi.plugin.response.init' message's data should be an object but it was '${data}'!`);
+    }
+    if (typeof data.settings !== 'object') {
+      throw new Error(`'grispi.plugin.response.init' message's data.settings should be an object but it was '${data.settings}'!`);
+    }
+    if (typeof data.context !== 'object') {
+      throw new Error(`'grispi.plugin.response.init' message's data.context should be an object but it was '${data.context}'!`);
+    }
+  }
 
   function sendMessage(type, data) {
 
@@ -119,9 +132,17 @@
           }, 50);
         });
       }
+
+      // Implementation note: _init() method will be called multiple times (at least 2 times):
+      // one by this code (at the end of the script) the second by the plugin implementation code
+      //via getSettings() or via init()
       initMethodCalled = true;
 
       return new Promise((resolve, reject) => {
+        // We need to capture the response of 'grispi.plugin.request.init' in below event listener so that
+        //we can resolve with the plugin settings (from the response)
+
+        //<editor-fold desc="messageEventListener()" defaultstate="collapsed">
         window.addEventListener(
           'message',
           (e) => {
@@ -148,6 +169,7 @@
 
             if (e.data.type === 'grispi.plugin.response.init') {
               pluginSettings = e.data.data;
+              validateInitData(pluginSettings);
               resolve(pluginSettings);
               return;
             }
@@ -174,13 +196,18 @@
 
             // Events other than above should be handled by individual apps.
             // For example, call-client handles events with prefix 'grispi.call.'
-          });
+          });// end of message handler
+        //</editor-fold>
         sendMessage('grispi.plugin.request.init');
       });
     }
     //</editor-fold>
 
-    getSettings() {
+    init() {
+      if (pluginImplementationCalledInit) {
+        console.warn("YOU ARE SUPPOSED TO CALL THIS METHOD (GrispiClient#init()) ONLY ONCE. THERE IS PROBABLY AN IMPLEMENTATION ERROR IN YOUR CODE!");
+      }
+      pluginImplementationCalledInit = true;
       return this._init();
     }
 

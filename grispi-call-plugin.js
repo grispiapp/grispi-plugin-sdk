@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.1.0";
+  const CALL_VERSION = "0.2.0";
   if (typeof GrispiClient !== "function") {
     throw new Error('E6 GrispiClient is not defined. Call Plugin Library should be added to the page after GrispiClient is defined.');
   }
