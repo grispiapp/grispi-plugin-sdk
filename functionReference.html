@@ -1,0 +1,164 @@
+<style>
+  code {
+    background-color: rgba(27, 31, 35, 0.05);
+    color: rgb(36, 41, 46);
+    padding: .2em .4em;
+    margin: 0;
+    border-radius: 6px;
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 85%;
+  }
+  em {
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 85%;
+  }
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 5px;
+  }
+
+  table, th, td {
+    border: 1px solid gainsboro;
+    padding: 5px;
+  }
+  tr > td:first-child {
+    font-weight: bold;
+    text-align: center;
+  }
+  td[colspan="2"] {
+    background-color: beige;
+    font-family: sans-serif;
+    font-size: .8em;
+  }
+</style>
+<h2>Plugin SDK Reference</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Function name</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td colspan="2">Call plugin functions</td>
+  </tr>
+  <tr>
+    <td><code>init</code></td>
+    <td>
+      has no parameter<br>
+      This function must be called before all other SDK functions.<br>
+      Returns promise with <code>pluginSettings (object)</code> as resolve parameter
+    </td>
+  </tr>
+  <tr>
+    <td><code>currentTicket</code></td>
+    <td>
+      has no parameter<br>
+      Returns promise with <code>currentTicketKey (string)</code> as resolve parameter
+    </td>
+  </tr>
+  <tr>
+    <td><code>validateImplementation</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td colspan="2">Functions to be implemented by the plugin</td>
+  </tr>
+  <tr>
+    <td><code>activeTicketChanged</code></td>
+    <td>has 1 parameter (string): currentTicketKey</td>
+  </tr>
+  </tbody>
+</table>
+<hr />
+<h2>Call Plugin SDK Reference</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Function name</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td colspan="2">Call plugin functions</td>
+  </tr>
+  <tr>
+    <td><code>callIncoming</code></td>
+    <td>has 1 parameter (string): phone number in E164 format</td>
+  </tr>
+  <tr>
+    <td><code>callDialing</code></td>
+    <td>
+      has 1 parameter (string): phone number in E164 format<br>
+      Outgoing call has ringtone and not answered yet by the customer
+    </td>
+  </tr>
+  <tr>
+    <td><code>callStarted</code></td>
+    <td>
+      has 1 parameter (string): phone number in E164 format<br>
+      This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
+    </td>
+  </tr>
+  <tr>
+    <td><code>callEnded</code></td>
+    <td>
+      has 1 parameter (string): phone number in E164 format<br>
+      This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
+    </td>
+  </tr>
+  <tr>
+    <td><code>statusSet</code></td>
+    <td>
+      has 1 parameter (string): status<br>
+      This will set the user's status in Grispi app
+    </td>
+  </tr>
+  <tr>
+    <td><code>validateImplementation</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td colspan="2">Functions to be implemented by the plugin</td>
+  </tr>
+  <tr>
+    <td><code>makeCall</code></td>
+    <td>has 1 parameter (string): phone number in E164 format</td>
+  </tr>
+  <tr>
+    <td><code>answerCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>hangupCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>muteCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>unmuteCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>holdCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>unholdCall</code></td>
+    <td>has no parameter</td>
+  </tr>
+  <tr>
+    <td><code>setStatus</code></td>
+    <td>has 1 parameter (string): the status</td>
+  </tr>
+  <tr>
+    <td><code>userIdentifiedForCall</code></td>
+    <td>has 1 parameter (object): the user</td>
+  </tr>
+  </tbody>
+</table>

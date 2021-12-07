@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.2.0";
+  const VERSION = "0.3.0";
 
   if (typeof window.GrispiClient === "function") {
     throw new Error(`E0 GrispiClient is already defined. Existing version: '${window.GrispiClient.version}' and this version: '${VERSION}'.`);
@@ -23,6 +23,7 @@
     throw new Error('E10 iframeAuth is empty!');
   }
 
+  let frozen = false;
   let initializing = false;
   let initMethodCalled = false;
   let pluginImplementationCalledInit = false;
@@ -43,6 +44,10 @@
   }
 
   function sendMessage(type, data) {
+
+    if (frozen) {
+      return;
+    }
 
     if (typeof type !== 'string') {
       console.error(`Cannot send message without a 'type'!`, type, data);
@@ -146,6 +151,9 @@
         window.addEventListener(
           'message',
           (e) => {
+            if (frozen) {
+              return;
+            }
             if (e.origin !== origin) {
               const msg = `E3 Origins does not match. Expected '${origin}' but found '${e.origin}'!`;
               console.error(msg);
@@ -217,6 +225,14 @@
         currentTicketResolveFn = resolve;
         //FIXME implement timeout, and think about multiple calls of this method
       });
+    }
+
+    freezeAllPluginFunctions() {
+      frozen = true;
+    }
+
+    releaseAllPluginFunctions() {
+      frozen = false;
     }
   }
 
