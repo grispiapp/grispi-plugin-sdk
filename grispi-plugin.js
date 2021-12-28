@@ -1,6 +1,6 @@
 {
 // ------------------ CLIENT LIBRARY ----------------------
-  const VERSION = "0.3.0";
+  const VERSION = "0.3.1";
 
   if (typeof window.GrispiClient === "function") {
     throw new Error(`E0 GrispiClient is already defined. Existing version: '${window.GrispiClient.version}' and this version: '${VERSION}'.`);
@@ -227,12 +227,18 @@
       });
     }
 
-    freezeAllPluginFunctions() {
+    freezeAllPluginFunctions(reason) {
+      sendMessage('grispi.plugin.event.frozen', reason);
       frozen = true;
     }
 
-    releaseAllPluginFunctions() {
+    releaseAllPluginFunctions(reason) {
       frozen = false;
+      sendMessage('grispi.plugin.event.unfrozen', reason);
+    }
+
+    isFrozen() {
+      return frozen;
     }
   }
 
