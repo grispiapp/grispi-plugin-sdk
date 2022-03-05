@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
 <head>
   <title>Grispi Plugin Documentation</title>
   <meta charset="utf-8" />
@@ -14,6 +14,16 @@
       border-radius: 6px;
       font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
       font-size: 85%;
+    }
+    h4 {
+      font-size: 0.9rem;
+      margin: 5px 0;
+    }
+    dl {
+      margin: 0;
+    }
+    dt,dd {
+      margin: 10px 5px;
     }
     td[colspan="2"] code {
       border: 1px solid burlywood;
@@ -39,6 +49,14 @@
     td[colspan="2"] {
       background-color: beige;
       font-size: .8em;
+    }
+    .optional {
+      border: 1px solid #cfcfd8;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4rem;
+      white-space: nowrap;
+      color: #5b5b66;
+      font-size: 0.7rem;
     }
   </style>
 </head>
@@ -74,28 +92,39 @@
   <tr>
     <td><code>init</code></td>
     <td>
-      has no parameter<br>
       This function must be called before all other SDK functions.<br>
-      Returns promise with <code>pluginSettings (object)</code> as resolve parameter
+      <pre>init(): Promise&lt;PluginSettings&gt;</pre>
+      <h4>Return value</h4>
+      Returns a promise with <code>pluginSettings (object)</code> as resolve parameter
     </td>
   </tr>
   <tr>
     <td><code>currentTicket</code></td>
     <td>
-      has no parameter<br>
-      Returns promise with <code>currentTicketKey (string)</code> as resolve parameter
+      <pre>currentTicket(): Promise&lt;String&gt;</pre>
+      <h4>Return value</h4>
+      Returns a promise with <code>currentTicketKey (string)</code> as resolve parameter
     </td>
   </tr>
   <tr>
     <td><code>validateImplementation</code></td>
-    <td>has no parameter</td>
+    <td>
+      <pre>validateImplementation(): void</pre>
+    </td>
   </tr>
   <tr>
     <td colspan="2">Functions to be implemented by the plugin <code>Grispi ⟶ Library</code></td>
   </tr>
   <tr>
     <td><code>activeTicketChanged</code></td>
-    <td>has 1 parameter (string): currentTicketKey</td>
+    <td>
+      <pre>validateImplementation(currentTicketKey: string): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>currentTicketKey</code></dt>
+        <dd>currentTicketKey (string)</dd>
+      </dl>
+    </td>
   </tr>
   </tbody>
 </table>
@@ -116,78 +145,149 @@
   </tr>
   <tr>
     <td><code>callIncoming</code></td>
-    <td>has 1 parameter (string): phone number in E164 format</td>
+    <td>
+      <pre>callIncoming(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>extras</code> <span class="optional">optional</span></dt>
+        <dd>Extra data that an implementation might want to send</dd>
+      </dl>
+    </td>
   </tr>
   <tr>
     <td><code>callDialing</code></td>
     <td>
-      has 1 parameter (string): phone number in E164 format<br>
       Outgoing call has ringtone and not answered yet by the customer
+      <pre>callDialing(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>extras</code> <span class="optional">optional</span></dt>
+        <dd>Extra data that an implementation might want to send</dd>
+      </dl>
     </td>
   </tr>
   <tr>
     <td><code>callStarted</code></td>
     <td>
-      has 1 parameter (string): phone number in E164 format<br>
       This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
+      <pre>callStarted(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>extras</code> <span class="optional">optional</span></dt>
+        <dd>Extra data that an implementation might want to send</dd>
+      </dl>
     </td>
   </tr>
   <tr>
     <td><code>callEnded</code></td>
     <td>
-      has 1 parameter (string): phone number in E164 format<br>
       This method should be called when active call is ended either by an agent or a customer.
+      <pre>callEnded(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>extras</code> <span class="optional">optional</span></dt>
+        <dd>Extra data that an implementation might want to send</dd>
+      </dl>
     </td>
   </tr>
   <tr>
     <td><code>statusSet</code></td>
     <td>
-      has 1 parameter (string): status<br>
       This will set the user's status in Grispi app
+      <pre>statusSet(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>extras</code> <span class="optional">optional</span></dt>
+        <dd>Extra data that an implementation might want to send</dd>
+      </dl>
     </td>
   </tr>
   <tr>
     <td><code>validateImplementation</code></td>
-    <td>has no parameter</td>
+    <td>
+      <pre>validateImplementation(): void</pre>
+    </td>
   </tr>
   <tr>
     <td colspan="2">Functions to be implemented by the plugin <code>Grispi ⟶ Library</code></td>
   </tr>
   <tr>
     <td><code>makeCall</code></td>
-    <td>has 1 parameter (string): phone number in E164 format</td>
+    <td>
+      <pre>makeCall(phoneNumber: string, ticketKey?: string): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>phoneNumber</code></dt>
+        <dd>phone number in E164 format</dd>
+
+        <dt><code>ticketKey</code> <span class="optional">optional</span></dt>
+        <dd>
+          When <code>ticketKey</code> is present, implementing plugin is expected to send <code>ticketKey</code> back in all
+          related call callbacks (e.g. <code>callStarted</code>) in <code>extras</code> param like <code>extras.ticketKey</code>.
+        </dd>
+      </dl>
+    </td>
   </tr>
   <tr>
     <td><code>answerCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>answerCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>hangupCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>hangupCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>muteCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>muteCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>unmuteCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>unmuteCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>holdCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>holdCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>unholdCall</code></td>
-    <td>has no parameter</td>
+    <td><pre>unholdCall(): void</pre></td>
   </tr>
   <tr>
     <td><code>setStatus</code></td>
-    <td>has 1 parameter (string): the status</td>
+    <td>
+      <pre>setStatus(status: string): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>status</code></dt>
+        <dd>status (string)</dd>
+      </dl>
+    </td>
   </tr>
   <tr>
     <td><code>userIdentifiedForCall</code></td>
-    <td>has 1 parameter (object): the user</td>
+    <td>
+      <pre>userIdentifiedForCall(user: User): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>user</code></dt>
+        <dd>user object. This is the end user with whom the call is made.</dd>
+      </dl>
+    </td>
   </tr>
   </tbody>
 </table>

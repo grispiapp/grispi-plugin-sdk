@@ -109,7 +109,7 @@
 
       if (missingMethods.length === 0) return true;
 
-      throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
+      throw new Error(`E8 Following methods are not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
     }
 
     // Following methods will be called by plugin code in order to inform the parent page (Grispi UI) about an event or to retrieve some info

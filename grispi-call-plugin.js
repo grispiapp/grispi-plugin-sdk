@@ -1,5 +1,5 @@
 {// ================= Call Plugin Library =================
-  const CALL_VERSION = "0.2.0";
+  const CALL_VERSION = "0.3.0";
   if (typeof GrispiClient !== "function") {
     throw new Error('E6 GrispiClient is not defined. Call Plugin Library should be added to the page after GrispiClient is defined.');
   }
@@ -20,11 +20,12 @@
 
         if ('grispi.call.request.makeCall' === e.data.type) {
           const phoneNumber = e.data.phoneNumber;
+          const ticketKey = e.data.ticketKey;
 
           if (typeof phoneNumber !== 'string') {
             console.error(`Invalid phone number for 'grispi.call.request.makeCall': '${phoneNumber}'`)
           }
-          this.makeCall(phoneNumber);
+          this.makeCall(phoneNumber, ticketKey);
           return true;
         }
 
@@ -50,7 +51,7 @@
         // In Grispi, you're expected to call following functions by sending a specific message to the plugin iframe as follows:
         // iFrameEl.current.contentWindow.postMessage({type: 'grispi.call.fn.<function_name>', parameters: [...]}, targetOrigin);
         const requiredMethods = {
-          'makeCall': false,  // has 1 parameter (string): phone number in E164 format
+          'makeCall': false,  // has 2 parameters (string, string): phone number in E164 format, ticket key (optional)
           'answerCall': false,// has no parameter
           'hangupCall': false,// has no parameter
           'muteCall': false,  // has no parameter
@@ -71,7 +72,7 @@
 
         if (missingMethods.length === 0) return true;
 
-        throw new Error(`E8 Following methods are not not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
+        throw new Error(`E8 Following methods are not implemented.\n${missingMethods.join(', ')}\nImplement them via 'GrispiClient.prototype.call.<methodName> = aFunction'`);
       },
 
       // Following methods will be called by plugin code in order to inform the parent page (Grispi UI) about an event or to retrieve some info
@@ -84,6 +85,7 @@
       /**
        * Outgoing call has ringtone and not answered yet by the customer
        * @param phoneNumber
+       * @param extras
        */
       callDialing: function (phoneNumber, extras) {
         sendMessage('grispi.call.event.dialing', {phoneNumber, extras});
@@ -91,6 +93,7 @@
       /**
        * This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
        * @param phoneNumber
+       * @param extras
        */
       callStarted: function (phoneNumber, extras) {
         sendMessage('grispi.call.event.started', {phoneNumber, extras});
