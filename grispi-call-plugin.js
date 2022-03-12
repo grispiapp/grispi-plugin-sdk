@@ -92,14 +92,26 @@
       },
       /**
        * This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
-       * @param phoneNumber
-       * @param extras
+       * @param callData object
+       * callData = {
+       *              callId: string
+       *              direction: 'OUTBOUND' | 'INBOUND',
+       *              source: string (if this is a phone number should be in E164 format)
+       *              destination: string (if this is a phone number should be in E164 format)
+       *              ticketKey: string (optional) if present it means the call is made for a ticket
+       *            }
        */
-      callStarted: function (phoneNumber, extras) {
-        sendMessage('grispi.call.event.started', {phoneNumber, extras});
+      callStarted: function (callData) {
+        sendMessage('grispi.call.event.started', {callData});
       },
       callEnded: function (phoneNumber, extras) {
         sendMessage('grispi.call.event.ended', {phoneNumber, extras});
+      },
+      callHeld: function (phoneNumber, extras) {
+        sendMessage('grispi.call.event.held', {phoneNumber, extras});
+      },
+      callUnheld: function (phoneNumber, extras) {
+        sendMessage('grispi.call.event.unheld', {phoneNumber, extras});
       },
       statusSet: function (status, extras) {
         //TODO validate status string
