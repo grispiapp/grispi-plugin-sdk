@@ -60,6 +60,7 @@
           'unholdCall': false,// has no parameter
           'setStatus': false, // has 1 parameter (string): the status
           'userIdentifiedForCall': false, // has 1 parameter (object): the user
+          'dtmf': false       // has 1 parameter (string): the tone
         };
 
         const missingMethods = [];

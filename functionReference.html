@@ -118,7 +118,7 @@
   <tr>
     <td><code>activeTicketChanged</code></td>
     <td>
-      <pre>validateImplementation(currentTicketKey: string): void</pre>
+      <pre>activeTicketChanged(currentTicketKey: string): void</pre>
       <h4>Parameters</h4>
       <dl>
         <dt><code>currentTicketKey</code></dt>
@@ -286,6 +286,17 @@
       <dl>
         <dt><code>user</code></dt>
         <dd>user object. This is the end user with whom the call is made.</dd>
+      </dl>
+    </td>
+  </tr>
+  <tr>
+    <td><code>dtmf</code></td>
+    <td>
+      <pre>dtmf(tone: string): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>tone</code></dt>
+        <dd>string that indicates DTMF signal.</dd>
       </dl>
     </td>
   </tr>
