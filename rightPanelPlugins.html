@@ -1,0 +1,55 @@
+<style>
+    body {
+        font-family: sans-serif;
+    }
+</style>
+<h1>Grispi App SDK</h1>
+
+<a href="functionReference.html">Function & error reference</a>
+
+<h1>Grispi Right Panel Apps</h1>
+
+Grispi Right Panel Apps are web applications with their own web UI which are rendered in <code>iframe</code> in Grispi pages.
+
+<p>
+    <img src="https://i.imgur.com/O3bsamU.png" style="min-width: 400px; max-width: 50%;">
+</p>
+
+<h2>Developing a <code>Right Panel App</code> for Grispi</h2>
+
+Follow the steps:
+
+<ol>
+    <li>Create a web application with your preferred technology stack.
+        <ul>
+            <li>Your web pages should be responsive.</li>
+        </ul>
+    </li>
+    <li>Load <code>grispi-plugin.js</code> in your web page.</li>
+    <li>Make sure you initialize the <code>GrispiClient</code> as explained below.</li>
+    <li>Create an app registration request to Grispi Help team from <a href="#" target="_blank">this support form</a>.</li>
+    <!--Grispi Right Panel Plugin Registration Request-->
+</ol>
+
+<h3>Using <code>ngrok</code> for development</h3>
+
+<p>
+    <a href="<code>ngrok</code>" target="_blank"><code>ngrok</code></a> is a free utility which opens your localhost to the internet
+    with SSL and (random) domain name.
+</p>
+
+<p>
+    When you create your Grispi App and run it on localhost, in order to test it you need to give a publicly reachable URL in
+    your <code>manifest.json</code> so that <code>grispi.com</code> or <code>grispi.net</code> be able to load it in your
+    users' browsers.
+</p>
+
+<p>
+    When you use ngrok with following command: <code>ngrok http 8080</code> it gives you a URL with a random domain.<br>
+    Whoever makes to request to this URL, ngrok forwards the request to your app running on your localhost.
+</p>
+
+<h2>Sample App</h2>
+
+Take a look at the Grispi Right Panel Sample App to see an example implementation:<br>
+<a src="https://github.com/grispiapp/right-panel-sample-app" target="_blank">Sample App Github</a>

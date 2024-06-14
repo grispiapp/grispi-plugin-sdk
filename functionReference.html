@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title>Grispi Plugin Documentation</title>
+  <title>Grispi App Documentation</title>
   <meta charset="utf-8" />
   <style>
     body {
@@ -62,7 +62,7 @@
 </head>
 <body>
 
-<h1>Plugin SDK Reference</h1>
+<h1>Grispi App SDK Reference</h1>
 
 <table>
   <tbody>
@@ -77,7 +77,7 @@
 
 <hr>
 
-<h2>Common Plugin SDK Reference</h2>
+<h2>Grispi App SDK Reference</h2>
 <table>
   <thead>
   <tr>
@@ -87,20 +87,30 @@
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">Functions to be called by the plugin  <code>Library ⟶ Grispi</code></td>
+    <td colspan="2">Functions to be called by the app <code>Library ⟶ Grispi</code></td>
   </tr>
   <tr>
     <td><code>init</code></td>
     <td>
       This function must be called before all other SDK functions.<br>
-      <pre>init(): Promise&lt;PluginSettings&gt;</pre>
+      <pre>init(): Promise&lt;Bundle&gt;</pre>
       <h4>Return value</h4>
-      Returns a promise with <code>pluginSettings (object)</code> as resolve parameter
+      Returns a promise with <code>bundle (object)</code> as the resolve parameter
+        <h4>Example Usage:</h4>
+<pre>
+  GrispiClient.instance().then(bundle => {
+    const context = bundle.context;   // Grispi context
+    const settings = bundle.settings; // Your custom settings object
+    // TODO initialize your app
+  });
+</pre>
     </td>
   </tr>
   <tr>
     <td><code>currentTicket</code></td>
     <td>
+      This function is only meaningful for <code>singleton</code> apps.<br>
+      Use the ticket data from <code>bundle.context.ticket</code> for <code>RIGHT_PANEL</code> apps.
       <pre>currentTicket(): Promise&lt;String&gt;</pre>
       <h4>Return value</h4>
       Returns a promise with <code>currentTicketKey (string)</code> as resolve parameter
@@ -113,186 +123,35 @@
     </td>
   </tr>
   <tr>
-    <td colspan="2">Functions to be implemented by the plugin <code>Grispi ⟶ Library</code></td>
+    <td colspan="2">Functions to be implemented by the app <code>Grispi ⟶ Library</code></td>
   </tr>
   <tr>
     <td><code>activeTicketChanged</code></td>
     <td>
-      <pre>validateImplementation(currentTicketKey: string): void</pre>
+      This function is only meaningful for <code>singleton</code> apps.<br>
+      Use the ticket data from <code>bundle.context.ticket</code> for <code>RIGHT_PANEL</code> apps.
+      <pre>activeTicketChanged(ticketKey: string): void</pre>
       <h4>Parameters</h4>
       <dl>
-        <dt><code>currentTicketKey</code></dt>
-        <dd>currentTicketKey (string)</dd>
+        <dt><code>ticket</code></dt>
+        <dd>ticket (object)</dd>
+      </dl>
+    </td>
+  </tr>
+  <tr>
+    <td><code>currentTicketChanged</code></td>
+    <td>
+      Use the ticket data from <code>bundle.context.ticket</code> for <code>RIGHT_PANEL</code> apps.
+      <pre>currentTicketChanged(ticketKey: string): void</pre>
+      <h4>Parameters</h4>
+      <dl>
+        <dt><code>ticket</code></dt>
+        <dd>ticket (object)</dd>
       </dl>
     </td>
   </tr>
   </tbody>
 </table>
-
-<hr />
-
-<h2>Call Plugin SDK Reference</h2>
-<table>
-  <thead>
-  <tr>
-    <th>Function name</th>
-    <th>Description</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td colspan="2">Functions to be called by the plugin <code>Library ⟶ Grispi</code></td>
-  </tr>
-  <tr>
-    <td><code>callIncoming</code></td>
-    <td>
-      <pre>callIncoming(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>extras</code> <span class="optional">optional</span></dt>
-        <dd>Extra data that an implementation might want to send</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>callDialing</code></td>
-    <td>
-      Outgoing call has ringtone and not answered yet by the customer
-      <pre>callDialing(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>extras</code> <span class="optional">optional</span></dt>
-        <dd>Extra data that an implementation might want to send</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>callStarted</code></td>
-    <td>
-      This method should be called when an incoming call answered or an outgoing call is started (even in ringing state)
-      <pre>callStarted(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>extras</code> <span class="optional">optional</span></dt>
-        <dd>Extra data that an implementation might want to send</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>callEnded</code></td>
-    <td>
-      This method should be called when active call is ended either by an agent or a customer.
-      <pre>callEnded(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>extras</code> <span class="optional">optional</span></dt>
-        <dd>Extra data that an implementation might want to send</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>statusSet</code></td>
-    <td>
-      This will set the user's status in Grispi app
-      <pre>statusSet(phoneNumber: string, extras?: Record&lt;string, any&gt;): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>extras</code> <span class="optional">optional</span></dt>
-        <dd>Extra data that an implementation might want to send</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>validateImplementation</code></td>
-    <td>
-      <pre>validateImplementation(): void</pre>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">Functions to be implemented by the plugin <code>Grispi ⟶ Library</code></td>
-  </tr>
-  <tr>
-    <td><code>makeCall</code></td>
-    <td>
-      <pre>makeCall(phoneNumber: string, ticketKey?: string): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>phoneNumber</code></dt>
-        <dd>phone number in E164 format</dd>
-
-        <dt><code>ticketKey</code> <span class="optional">optional</span></dt>
-        <dd>
-          When <code>ticketKey</code> is present, implementing plugin is expected to send <code>ticketKey</code> back in all
-          related call callbacks (e.g. <code>callStarted</code>) in <code>extras</code> param like <code>extras.ticketKey</code>.
-        </dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>answerCall</code></td>
-    <td><pre>answerCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>hangupCall</code></td>
-    <td><pre>hangupCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>muteCall</code></td>
-    <td><pre>muteCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>unmuteCall</code></td>
-    <td><pre>unmuteCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>holdCall</code></td>
-    <td><pre>holdCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>unholdCall</code></td>
-    <td><pre>unholdCall(): void</pre></td>
-  </tr>
-  <tr>
-    <td><code>setStatus</code></td>
-    <td>
-      <pre>setStatus(status: string): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>status</code></dt>
-        <dd>status (string)</dd>
-      </dl>
-    </td>
-  </tr>
-  <tr>
-    <td><code>userIdentifiedForCall</code></td>
-    <td>
-      <pre>userIdentifiedForCall(user: User): void</pre>
-      <h4>Parameters</h4>
-      <dl>
-        <dt><code>user</code></dt>
-        <dd>user object. This is the end user with whom the call is made.</dd>
-      </dl>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
-<hr>
 
 <iframe style="border: 0; width: 100%; height: 800px;" src="errorCodes.html"></iframe>
 </body>
